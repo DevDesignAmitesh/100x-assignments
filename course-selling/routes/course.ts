@@ -8,12 +8,7 @@ import { deleteOneCourseService } from "../services/courses/delete-one";
 
 export const courseRouter = Router();
 
-courseRouter.post(
-  "/courses",
-  authMiddleware,
-  rbac("INSTRUCTOR"),
-  createCourseService,
-);
-courseRouter.get("/courses", getAllCoursesService);
-courseRouter.get("/courses/:id", getOneCourseService);
-courseRouter.delete("/courses/:id", deleteOneCourseService);
+courseRouter.post("/", authMiddleware, rbac("INSTRUCTOR"), createCourseService);
+courseRouter.get("/", getAllCoursesService);
+courseRouter.get("/:id", getOneCourseService);
+courseRouter.delete("/:id", deleteOneCourseService);
