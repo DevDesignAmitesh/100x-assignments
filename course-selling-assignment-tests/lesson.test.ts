@@ -35,7 +35,7 @@ describe("Lesson APIs", () => {
     });
 
     const data = await res.json();
-    instructorToken = data.token;
+    instructorToken = data.data.token;
 
     expect(instructorToken).toBeDefined();
   });
@@ -55,7 +55,7 @@ describe("Lesson APIs", () => {
     });
 
     const data = await res.json();
-    courseId = data.id;
+    courseId = data.data.courseId;
 
     expect(courseId).toBeDefined();
   });
@@ -75,17 +75,17 @@ describe("Lesson APIs", () => {
     });
 
     const data = await res.json();
-    lessonId = data.id;
+    lessonId = data.data.id;
 
+    
     expect(res.status).toBe(200);
     expect(lessonId).toBeDefined();
   });
 
   it("should get lessons for a course (public)", async () => {
-    const res = await fetch(`${BASE_URL}/courses/${courseId}/lessons`);
+    const res = await fetch(`${BASE_URL}/lessons/${courseId}/lessons`);
     const data = await res.json();
-
-    expect(Array.isArray(data)).toBe(true);
-    expect(data[0].courseId).toBe(courseId);
+    expect(Array.isArray(data.data.lessons)).toBe(true);
+    expect(data.data.lessons[0].courseId).toBe(courseId);
   });
 });

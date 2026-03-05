@@ -5,10 +5,7 @@ import { prisma } from "../../db";
 
 export const createLessonService = async (req: Request, res: Response) => {
   const { userId } = req.user;
-  const { data, success, error } = createLessonSchema.safeParse({
-    ...req.body,
-    ...req.params,
-  });
+  const { data, success, error } = createLessonSchema.safeParse(req.body);
 
   if (!success) {
     return responsePlate({
@@ -33,7 +30,7 @@ export const createLessonService = async (req: Request, res: Response) => {
     });
   }
 
-  await prisma.lesson.create({
+  const lesson = await prisma.lesson.create({
     data: {
       courseId: course.id,
       title,
@@ -44,6 +41,9 @@ export const createLessonService = async (req: Request, res: Response) => {
   return responsePlate({
     res,
     message: "lesson created successfully",
-    status: 201,
+    status: 200,
+    data: {
+      id: lesson.id
+    }
   });
 };

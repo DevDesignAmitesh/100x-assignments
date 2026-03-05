@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/courses", courseRouter);
-app.use("/api/v1/lesson", lessonRouter);
+app.use("/api/v1/lessons", lessonRouter);
 app.use("/api/v1/purchases", purchaseRouter);
 
 app.listen(3000, () => {

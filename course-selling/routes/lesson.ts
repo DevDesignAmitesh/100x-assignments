@@ -7,7 +7,7 @@ import { getAllLessonService } from "../services/lessons/get-all";
 export const lessonRouter = Router();
 
 lessonRouter.post(
-  "/:courseId",
+  "/",
   authMiddleware,
   rbac("INSTRUCTOR"),
   createLessonService,
