@@ -24,7 +24,7 @@ export const deleteOneCourseService = async (req: Request, res: Response) => {
 
   return responsePlate({
     res,
-    message: "course deleted",
+    message: "Course deleted",
     status: 200,
   });
 };

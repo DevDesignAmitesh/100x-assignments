@@ -44,6 +44,6 @@ export const signupService = async (req: Request, res: Response) => {
   return responsePlate({
     res,
     message: "user registered successfully, kindly login",
-    status: 201,
+    status: 200,
   });
 };

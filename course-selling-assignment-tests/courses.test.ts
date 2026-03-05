@@ -1,6 +1,5 @@
 import { describe, it, expect } from "bun:test";
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from ".";
 
 let instructorToken = "";
 let courseId = "";
@@ -39,7 +38,7 @@ describe("Course APIs", () => {
     });
 
     const data = await res.json();
-    instructorToken = data.token;
+    instructorToken = data.data.token;
 
     expect(instructorToken).toBeDefined();
   });
@@ -59,7 +58,7 @@ describe("Course APIs", () => {
     });
 
     const data = await res.json();
-    courseId = data.id;
+    courseId = data.data.courseId;
 
     expect(res.status).toBe(200);
     expect(courseId).toBeDefined();
@@ -69,18 +68,19 @@ describe("Course APIs", () => {
     const res = await fetch(`${BASE_URL}/courses`);
     const data = await res.json();
 
-    expect(Array.isArray(data)).toBe(true);
+    expect(Array.isArray(data.data.courses)).toBe(true);
   });
 
   it("should get course by id", async () => {
     const res = await fetch(`${BASE_URL}/courses/${courseId}`);
     const data = await res.json();
 
-    expect(data.id).toBe(courseId);
-    expect(data.title).toBe("Test Course");
+    expect(data.data.course.id).toBe(courseId);
+    expect(data.data.course.title).toBe("Test Course");
   });
 
   it("should update course", async () => {
+    console.log("courseId ", courseId);
     const res = await fetch(`${BASE_URL}/courses/${courseId}`, {
       method: "PATCH",
       headers: {
@@ -93,7 +93,8 @@ describe("Course APIs", () => {
     });
 
     const data = await res.json();
-    expect(data.title).toBe("Updated Course Title");
+    console.log("data from update course", data);
+    expect(data.data.course.title).toBe("Updated Course Title");
   });
 
   it("should delete course", async () => {
@@ -134,7 +135,7 @@ describe("Course APIs", () => {
     });
 
     const data = await res.json();
-    studentToken = data.token;
+    studentToken = data.data.token;
 
     expect(studentToken).toBeDefined();
   });

@@ -1,6 +1,5 @@
 import { describe, it, expect } from "bun:test";
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from ".";
 
 let token = "";
 
@@ -32,18 +31,18 @@ describe("Auth APIs", () => {
         });
 
         const data = await res.json();
-        expect(data.token).toBeDefined();
-        token = data.token;
+        expect(data.data.token).toBeDefined();
+        token = data.data.token;
     });
 
     it("should return /me", async () => {
-        const res = await fetch(`${BASE_URL}/me`, {
+        const res = await fetch(`${BASE_URL}/auth/me`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
 
         const data = await res.json();
-        expect(data.email).toBe(email);
+        expect(data.data.user.email).toBe(email);
     });
 });

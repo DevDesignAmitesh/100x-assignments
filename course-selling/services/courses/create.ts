@@ -18,7 +18,7 @@ export const createCourseService = async (req: Request, res: Response) => {
 
   const { description, price, title } = data;
 
-  await prisma.course.create({
+  const course = await prisma.course.create({
     data: {
       title,
       description,
@@ -30,6 +30,9 @@ export const createCourseService = async (req: Request, res: Response) => {
   return responsePlate({
     res,
     message: "course created",
-    status: 201,
+    status: 200,
+    data: {
+      courseId: course.id
+    }
   });
 };

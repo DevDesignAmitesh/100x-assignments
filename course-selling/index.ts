@@ -12,3 +12,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/lesson", lessonRouter);
 app.use("/api/v1/purchases", purchaseRouter);
+
+app.listen(3000, () => {
+  console.log("port is running at 3000");
+});

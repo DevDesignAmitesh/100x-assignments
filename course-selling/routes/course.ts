@@ -15,7 +15,7 @@ courseRouter.get("/", getAllCoursesService);
 courseRouter.get("/:id", getOneCourseService);
 courseRouter.get("/:id/stats", getOneCourseStatsService);
 courseRouter.patch(
-  "/:id",
+  "/:courseId",
   authMiddleware,
   rbac("INSTRUCTOR"),
   updateOneCourseService,

@@ -8,4 +8,4 @@ export const authRouter = Router();
 
 authRouter.post("/signup", signupService);
 authRouter.post("/login", loginService);
-authRouter.post("/me", authMiddleware, meService);
+authRouter.get("/me", authMiddleware, meService);

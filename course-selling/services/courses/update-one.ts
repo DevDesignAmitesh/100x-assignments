@@ -33,7 +33,7 @@ export const updateOneCourseService = async (req: Request, res: Response) => {
     });
   }
 
-  await prisma.course.update({
+  const updatedCourse = await prisma.course.update({
     where: { id: course.id },
     data: {
       description,
@@ -46,6 +46,6 @@ export const updateOneCourseService = async (req: Request, res: Response) => {
     res,
     message: "course updated",
     status: 201,
-    data: { courseId },
+    data: { course: updatedCourse },
   });
 };

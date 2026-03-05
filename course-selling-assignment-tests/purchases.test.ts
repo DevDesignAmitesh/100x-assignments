@@ -1,6 +1,5 @@
 import { describe, it, expect } from "bun:test";
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from ".";
 
 let instructorToken = "";
 let studentToken = "";
