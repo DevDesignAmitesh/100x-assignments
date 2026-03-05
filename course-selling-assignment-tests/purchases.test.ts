@@ -36,7 +36,7 @@ describe("Purchase APIs", () => {
     });
 
     const data = await res.json();
-    instructorToken = data.token;
+    instructorToken = data.data.token;
 
     expect(instructorToken).toBeDefined();
   });
@@ -56,7 +56,7 @@ describe("Purchase APIs", () => {
     });
 
     const data = await res.json();
-    courseId = data.id;
+    courseId = data.data.courseId;
 
     expect(courseId).toBeDefined();
   });
@@ -80,7 +80,7 @@ describe("Purchase APIs", () => {
     });
 
     const data = await res.json();
-    studentToken = data.token;
+    studentToken = data.data.token;
 
     expect(studentToken).toBeDefined();
   });
@@ -100,14 +100,14 @@ describe("Purchase APIs", () => {
 
   it("student can fetch own purchases", async () => {
     // get student id from /me
-    const meRes = await fetch(`${BASE_URL}/me`, {
+    const meRes = await fetch(`${BASE_URL}/auth/me`, {
       headers: {
         Authorization: `Bearer ${studentToken}`,
       },
     });
 
     const me = await meRes.json();
-    studentId = me.id;
+    studentId = me.data.user.id;
 
     const res = await fetch(`${BASE_URL}/users/${studentId}/purchases`, {
       headers: {

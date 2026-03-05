@@ -8,5 +8,5 @@ export const purchaseRouter = Router();
 
 purchaseRouter.use(authMiddleware, rbac("STUDENT"));
 
-purchaseRouter.post("/:courseId", purchaseService);
+purchaseRouter.post("/", purchaseService);
 purchaseRouter.get("/users/purchases", allUsersPurchasesService);

@@ -5,7 +5,7 @@ import { prisma } from "../../db";
 
 export const purchaseService = async (req: Request, res: Response) => {
   const { userId } = req.user;
-  const { success, data, error } = purchaseCourseSchema.safeParse(req.params);
+  const { success, data, error } = purchaseCourseSchema.safeParse(req.body);
 
   if (!success) {
     return responsePlate({
@@ -40,6 +40,6 @@ export const purchaseService = async (req: Request, res: Response) => {
   return responsePlate({
     res,
     message: "course purchased",
-    status: 201,
+    status: 200,
   });
 };
