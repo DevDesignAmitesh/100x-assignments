@@ -7,6 +7,7 @@ export const getOneCourseService = async (req: Request, res: Response) => {
 
   const course = await prisma.course.findFirst({
     where: { id },
+    include: { lessons: true, instructor: true }
   });
 
   if (!course) {

@@ -3,10 +3,11 @@ import { prisma } from "../../db";
 import { responsePlate } from "../../lib";
 
 export const deleteOneCourseService = async (req: Request, res: Response) => {
+  const { userId } = req.user;
   const { id } = req.params as { id: string };
 
   const course = await prisma.course.findFirst({
-    where: { id },
+    where: { id, instructorId: userId  },
   });
 
   if (!course) {
