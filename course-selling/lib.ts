@@ -1,4 +1,5 @@
 import type { Response } from "express";
+import type { ZodError } from "zod";
 
 export const responsePlate = ({
   res,
@@ -15,4 +16,10 @@ export const responsePlate = ({
     data,
     message,
   });
+};
+
+export const zodErrorMessage = ({ error }: { error: ZodError }) => {
+  return error.issues
+    .map((er) => `${er.path.join(".")}: ${er.message}`)
+    .join(", ");
 };
