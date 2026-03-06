@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum role {
+  teacher
+  student
+}
+
+enum attendanceStatus {
+  present
+  absent
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     role
+
+  teacher    Class[]      @relation("class-teacher")
+  student    Class[]      @relation("class-student")
+  attendance Attendance[]
+}
+
+model Class {
+  id        String @id @default(uuid())
+  className String
+
+  teacherId String
+  teacher   User   @relation("class-teacher", fields: [teacherId], references: [id])
+
+  students User[] @relation("class-student")
+
+  attendance Attendance[]
+}
+
+model Attendance {
+  id String @id @default(uuid())
+
+  classId String
+  class   Class  @relation(fields: [classId], references: [id])
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id])
+
+  status attendanceStatus
+}

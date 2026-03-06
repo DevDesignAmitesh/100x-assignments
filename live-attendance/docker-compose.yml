@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=secretpassword
+      - POSTGRES_DB=live-attendance
+      - POSTGRES_USER=postgres
