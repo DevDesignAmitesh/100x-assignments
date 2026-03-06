@@ -39,6 +39,8 @@ model Class {
   students User[] @relation("class-student")
 
   attendance Attendance[]
+
+  startedAt DateTime?
 }
 
 model Attendance {
