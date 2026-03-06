@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { getClassSchema } from "../../validation";
 import { prisma } from "../../db";
+import { attendance } from "../../attendance";
 
 export const startClassService = async (req: Request, res: Response) => {
   const { userId } = req.user;
@@ -34,10 +35,12 @@ export const startClassService = async (req: Request, res: Response) => {
     data: { startedAt },
   });
 
+  attendance.start(classId, startedAt);
+
   return res.status(200).json({
     success: true,
     data: {
-      classId: "c101",
+      classId,
       startedAt,
     },
   });

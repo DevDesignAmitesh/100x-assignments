@@ -1,26 +1,13 @@
-import express, { type Request } from "express";
-import { authRouter } from "./routes/auth";
-import { classRouter } from "./routes/class";
-import { authMiddleware } from "./auth-middleware";
-import { rbac } from "./rbac";
-import { getStudentsService } from "./services/extra/get-students";
-import { startClassService } from "./services/extra/start-class";
-import expressWs from "express-ws";
-import type { ExtendedWs } from "./types";
-import { verifyToken } from "./token";
-import { attendance } from "./attendance";
-import { prisma } from "./db";
-import type WebSocket from "ws";
+import { WebSocketServer } from "ws";
+import type { ExtendedWs } from "../types";
+import { verifyToken } from "../token";
+import { attendance } from "../attendance";
+import { prisma } from "../db";
 
-export const app = express();
-expressWs(app);
+const server = new WebSocketServer({ port: 8080 });
 
-const connections: WebSocket[] = [];
-
-app.ws("/ws", (ws: ExtendedWs, req: Request) => {
-  console.log("connected");
-  connections.push(ws);
-  const token = req.query.token as string | undefined;
+server.on("connection", (ws: ExtendedWs, req) => {
+  const token = req.url?.split("token=")[1];
 
   if (!token) {
     ws.send(
@@ -51,14 +38,7 @@ app.ws("/ws", (ws: ExtendedWs, req: Request) => {
   ws.user = decoded;
 
   ws.on("message", async (data) => {
-    let parsedData;
-    try {
-      parsedData = JSON.parse(data.toString());
-    } catch (err) {
-      console.log("json parsing error ", err)
-      ws.close()
-      return;
-    }
+    const parsedData = JSON.parse(data.toString());
 
     if (parsedData.event === "ATTENDANCE_MARKED") {
       const { studentId, status } = parsedData.data;
@@ -89,7 +69,7 @@ app.ws("/ws", (ws: ExtendedWs, req: Request) => {
 
       attendance.activeSession.attendance[studentId] = status;
 
-      connections.forEach((ws) => {
+      server.clients.forEach((ws) => {
         ws.send(
           JSON.stringify({
             event: "ATTENDANCE_MARKED",
@@ -142,7 +122,7 @@ app.ws("/ws", (ws: ExtendedWs, req: Request) => {
         total += 1;
       }
 
-      connections.forEach((ws) => {
+      server.clients.forEach((ws) => {
         ws.send(
           JSON.stringify({
             event: "TODAY_SUMMARY",
@@ -227,20 +207,4 @@ app.ws("/ws", (ws: ExtendedWs, req: Request) => {
       });
     }
   });
-});
-
-app.use(express.json());
-
-app.use("/auth", authRouter);
-app.use("/class", classRouter);
-app.get("/students", authMiddleware, rbac("teacher"), getStudentsService);
-app.get(
-  "/attendance/start",
-  authMiddleware,
-  rbac("teacher"),
-  startClassService,
-);
-
-app.listen(3000, () => {
-  console.log("server is running at 3000");
 });

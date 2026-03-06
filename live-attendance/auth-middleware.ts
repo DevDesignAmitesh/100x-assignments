@@ -15,21 +15,28 @@ export const authMiddleware = (
     });
   }
 
-  const bearerToken = token.split("Bearer ")[1];
+  // const bearerToken = token.split("Bearer ")[1];
 
-  if (!bearerToken) {
+  // if (!bearerToken) {
+  //   return res.status(401).json({
+  //     success: false,
+  //     error: "Unauthorized, token missing or invalid",
+  //   });
+  // }
+
+  let decoded;
+
+  try {
+    decoded = verifyToken(token);
+  } catch (e) {
+    console.log("error while verifying token ", e);
     return res.status(401).json({
       success: false,
       error: "Unauthorized, token missing or invalid",
     });
   }
 
-  let decoded;
-
-  try {
-    decoded = verifyToken(bearerToken);
-  } catch (e) {
-    console.log("error while verifying token ", e);
+  if (!decoded) {
     return res.status(401).json({
       success: false,
       error: "Unauthorized, token missing or invalid",

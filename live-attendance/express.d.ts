@@ -1,3 +1,4 @@
+import type WebSocket from "ws";
 import type { TokenPayload } from "./types";
 
 declare global {

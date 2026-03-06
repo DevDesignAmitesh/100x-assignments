@@ -8,5 +8,9 @@ export const generateToken = (payload: TokenPayload) => {
 };
 
 export const verifyToken = (token: string) => {
-  return verify(token, secret) as TokenPayload;
+  try {
+    return verify(token, secret) as TokenPayload;
+  } catch {
+    return null;
+  }
 };
