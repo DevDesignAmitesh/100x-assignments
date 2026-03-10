@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum role {
+  USER
+  SERVICE_PROVIDER
+}
+
+enum serviceType {
+  MEDICAL
+  HOUSE_HELP
+  BEAUTY
+  FITNESS
+  EDUCATION
+  OTHER
+}
+
+enum appointmentStatus {
+  BOOKED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  provider    Service[]
+  appointment Appointment[]
+}
+
+model Service {
+  id                String      @id @default(uuid())
+  name              String
+  type              serviceType
+  durationInMinutes String
+
+  providerId String
+  provider   User   @relation(fields: [providerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  availability Availability[]
+  appointment  Appointment[]
+}
+
+model Availability {
+  id         String   @id @default(uuid())
+  daysOfWeek Int //  (0 = Sunday, 6 = Saturday)
+  startTime  DateTime @db.Time()
+  endTime    DateTime @db.Time()
+
+  serviceId String
+  service   Service @relation(references: [id], fields: [serviceId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Appointment {
+  id String @id @default(uuid())
+
+  date      DateTime          @db.Date
+  startTime DateTime          @db.Time()
+  endTime   DateTime          @db.Time()
+  slotId    String            @unique
+  status    appointmentStatus
+
+  userId String
+  user   User   @relation(references: [id], fields: [userId])
+
+  serviceId String
+  service   Service @relation(references: [id], fields: [serviceId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
